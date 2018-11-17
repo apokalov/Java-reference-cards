@@ -1,5 +1,6 @@
 # JPA-cheatsheet
 
+#### Entity state transitions in JPA:
 ![1_entity_2_tables](https://github.com/chirkov86/JPA-cheatsheet/blob/master/jpaentitystates.png)
 
 #### 1. Creating an entity in a domain level
