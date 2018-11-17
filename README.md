@@ -26,7 +26,7 @@ public class Employee {
 ```
 
 #### 2. @Basic
-A basic attribute is one where the attribute class is a simple type such as `String, Number, Date` or a primitive. The following table summarizes the basic types and the database types they map to:
+A basic attribute is for simple types such as `String, Number, Date` or a primitive. The following table summarizes the basic types and the database types they map to:
 
 Java type | Database type
 --------- | -------------
@@ -39,15 +39,19 @@ java.sql.Time	| TIME (TIMESTAMP, DATETIME)
 java.sql.Timestamp	| TIMESTAMP (DATETIME, DATE)
 java.lang.Enum	| NUMERIC (VARCHAR, CHAR)
 
+Any un-mapped field will be automatically mapped as `@basic` and column name defaulted.
+
 By default all Basic mappings are `EAGER`, though fetch attribute can be set on a Basic mapping to use `LAZY` fetching:
 `@Basic(fetch=FetchType.LAZY)`.
 
-A Basic attribute can have `optional` which defines whether the value of the field may be null. By default everything is assumed to be optional, except for an Id.
+A Basic attribute can have `optional` which defines whether the value of the field may be null. By default everything is assumed to be optional, except for an `@Id`.
 
 `@Basic(optional = false)` vs `@Column(nullable = false)` in JPA:
 The definition of `optional` talks about property and field values and suggests that this feature should be evaluated within the runtime. `nullable` is only in reference to database columns.
 
 #### 3. @Column
+Is used to specify a mapped column for a persistent property or field. If no `@Column` is specified, the default values are applied.
+
 There are various attributes on the `@Column` annotation:
 ```java
 @Column(name="SSN", unique=true, nullable=false, description="description")
@@ -57,16 +61,15 @@ private String firstName;
 @Column(name="SALARY", scale=10, precision=2)
 private BigDecimal salary;       
 @Column(name="S_TIME", columnDefinition="TIMESTAMPTZ")
+private Calendar startTime;
 ```
-The `@Column` defines `insertable` and `updatable` options. These allow for this column, or foreign key field to be omitted from the SQL INSERT or UPDATE statement. These can be used if constraints on the table prevent insert or update operations. Setting both insertable and updatable to false, effectively mark the attribute as read-only.
+The `@Column` defines `insertable` and `updatable` options. These allow for this column to be omitted from the SQL INSERT or UPDATE statement. Setting both insertable and updatable to false, effectively mark the attribute as read-only.
 
 #### 4. @Transient
 JPA's `@Transient` annotation is used to indicate that a field is not to be persisted in the database:
 ```java
 @Entity
 public class Employee {
-  // Any un-mapped field will be automatically mapped as basic and column name defaulted.
-  private BigDecimal salary;       
   // Non-persistent fields must be marked as transient.
   @Transient
   private EmployeeService service;
@@ -75,7 +78,7 @@ public class Employee {
 ```
 
 #### 5. @Enumerated
-By default in JPA an attribute of type Enum will be stored as a Basic to the database, using the integer Enum values as codes (i.e. 0, 1). JPA also defines an `@Enumerated` annotation to define an Enum attribute. This can be used to store the Enum as the STRING value of its name (i.e. "MALE", "FEMALE"):
+By default type Enum will be stored as a Basic to the db, using the integer Enum values as codes (i.e. 0, 1). JPA also defines an `@Enumerated` annotation to define an Enum attribute. This can be used to store the Enum as the STRING value of its name (i.e. "MALE", "FEMALE"):
 ```java
 public enum Gender {
     MALE,
@@ -96,7 +99,7 @@ public class Employee {
 JPA provides several strategies for id generation: 
 - TABLE uses sequence table in db 
 - SEQUENCE special database objects to generate ids. Supported in Oracle and Postgres.
-- IDENTITY uses special `IDENTITY` columns in db. Identity sequencing requires the insert to occur before the id can be assigned, so it is not assigned on persist like other types of sequencing. You must either call commit() on the current transaction, or call flush() on the EntityManager.
+- IDENTITY uses special `IDENTITY` columns in db. Identity sequencing requires the insert to occur before the id can be assigned, so it is not assigned on persist like other types of sequencing. One must either call `commit()` on the current transaction, or call `flush()` on the EntityManager.
 ```java
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,12 +107,12 @@ JPA provides several strategies for id generation:
 ```
 #### 7. Entity relationships
 Possible types of associations are:
-- `OneToOne` - A unique reference from one object to another
-- `ManyToOne` - A reference from one object to another
-- `OneToMany` - A Collection or Map of objects, inverse of a ManyToOne
-- `ManyToMany` - A Collection or Map of objects
-- `Embedded` - A reference to a object that shares the same table of the parent
-- `ElementCollection` - A Collection or Map of Basic or Embeddable objects, stored in a separate table
+- `OneToOne` - unique reference from one object to another
+- `ManyToOne` - reference from one object to another
+- `OneToMany` - Collection or Map of objects, inverse of a ManyToOne
+- `ManyToMany` - Collection or Map of objects
+- `Embedded` - reference to a object that shares the same table of the parent
+- `ElementCollection` - Collection or Map of Basic or Embeddable objects, stored in a separate table
 
 #### 8. Fetching
 Lazy fetching allows the fetching of a relationship to be deferred until it is accessed.
@@ -118,13 +121,13 @@ The default fetch type is `LAZY` for all relationships except for `OneToOne` and
 @OneToOne(fetch=FetchType.LAZY)
 ```
 For collection relationships sending `size()` is normally the best way to ensure a lazy relationship is instantiated. For `OneToOne` and `ManyToOne` normally just accessing the relationship is enough (i.e. `employee.getAddress()`).
-Another solution is to use the JPQL `JOIN FETCH` for the relationship when querying the objects. A join fetch will normally ensure the relationship has been instantiated.
+Another solution is to use the JPQL `JOIN FETCH` for the relationship when querying the objects.
 
 #### 9. Cascading
 Relationships can have a cascade option that allows to model dependent relationships such as `Order` -> `OrderLine`. Cascading such relationship allows for the Order's -> OrderLines to be persisted, removed, merged along with their parent.
 The following operations can be cascaded, as defined in the `CascadeType` enum:
 - `PERSIST` - Cascaded the `EntityManager.persist()` operation. If `persist()` is called on the parent, and the child is also new, it will also be persisted. If it is existing, nothing will occur, although calling `persist()` on an existing object will still cascade the persist operation to its dependents.
-- `REMOVE` - Cascaded the `EntityManager.remove()` operation. If remove() is called on the parent then the child will also be removed. This should only be used for dependent relationships. If you remove a dependent object from a `OneToMany` collection it will not be deleted, JPA requires that you explicitly call `remove()` on it.
+- `REMOVE` - If `EntityManager.remove()` is called on the parent then the child will also be removed. This should only be used for dependent relationships. If one removes a dependent object from a `OneToMany` collection it will not be deleted, JPA requires that you explicitly call `remove()` on it.
 - `MERGE` - Cascaded the `EntityManager.merge()` operation.
 - `REFRESH` - Cascaded the `EntityManager.refresh()` operation. Be careful enabling this for all relationships, as it could cause changes made to other objects to be reset.
 - `ALL` - Cascaded all the above operations.
