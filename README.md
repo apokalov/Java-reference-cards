@@ -3,7 +3,7 @@
 #### Entity state transitions in JPA:
 ![1_entity_2_tables](https://github.com/chirkov86/JPA-cheatsheet/blob/master/jpaentitystates.png)
 
-#### 1. Creating an entity in a domain level
+#### 1. Creating a JPA entity
 ```java
 @Entity
 @Table(name="EMPLOYEE") // this may be omitted if the class name is the same as the table name
@@ -26,27 +26,26 @@ public class Employee {
 ```
 
 #### 2. @Basic
-A basic attribute is one where the attribute class is a simple type such as `String, Number, Date` or a primitive. A basic attribute's value can map directly to the column value in the database. The following table summarizes the basic types and the database types they map to:
+A basic attribute is one where the attribute class is a simple type such as `String, Number, Date` or a primitive. The following table summarizes the basic types and the database types they map to:
 
 Java type | Database type
 --------- | -------------
 String (char, char[]) | VARCHAR (CHAR, VARCHAR2, CLOB, TEXT)
-Number (BigDecimal, BigInteger, Integer, Double, Long, Float, Short, Byte)	|NUMERIC (NUMBER, INT, LONG, FLOAT, DOUBLE)
-int, long, float, double, short, byte	| NUMERIC (NUMBER, INT, LONG, FLOAT, DOUBLE)
-byte[]	| VARBINARY (BINARY, BLOB)
+Number (BigDecimal, BigInteger, Integer, Double, Long, Float, Short, Byte), int, long, float, double, short, byte	|NUMERIC (NUMBER, INT, LONG, FLOAT, DOUBLE)
 boolean (Boolean)	| BOOLEAN (BIT, SMALLINT, INT, NUMBER)
 java.util.Date	| TIMESTAMP (DATE, DATETIME)
 java.sql.Date	| DATE (TIMESTAMP, DATETIME)
 java.sql.Time	| TIME (TIMESTAMP, DATETIME)
 java.sql.Timestamp	| TIMESTAMP (DATETIME, DATE)
-java.util.Calendar	| TIMESTAMP (DATETIME, DATE)
 java.lang.Enum	| NUMERIC (VARCHAR, CHAR)
-java.util.Serializable	| VARBINARY (BINARY, BLOB)
 
 By default all Basic mappings are `EAGER`, though fetch attribute can be set on a Basic mapping to use `LAZY` fetching:
 `@Basic(fetch=FetchType.LAZY)`.
 
-A Basic attribute can be optional if its value is allowed to be null. By default everything is assumed to be optional, except for an Id
+A Basic attribute can have `optional` which defines whether the value of the field may be null. By default everything is assumed to be optional, except for an Id.
+
+`@Basic(optional = false)` vs `@Column(nullable = false)` in JPA:
+The definition of `optional` talks about property and field values and suggests that this feature should be evaluated within the runtime. `nullable` is only in reference to database columns.
 
 #### 3. @Column
 There are various attributes on the `@Column` annotation:
