@@ -302,7 +302,7 @@ JPQL is similar to SQL, but operates on objects, attributes and relationships in
 Aggregation functions can include summary information on a set of objects. These include MIN, MAX, AVG, SUM, COUNT.
 
 A JOIN clause can also be used in the FROM clause:\
-`SELECT e FROM Employee e JOIN e.address a WHERE a.city = :city`\ 
+`SELECT e FROM Employee e JOIN e.address a WHERE a.city = :city`\
 or\
 `SELECT e FROM Employee e LEFT JOIN e.address a ON a.city = :city` in JPA 2.1
 
