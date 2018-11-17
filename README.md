@@ -301,25 +301,26 @@ JPQL is similar to SQL, but operates on objects, attributes and relationships in
 
 Aggregation functions can include summary information on a set of objects. These include MIN, MAX, AVG, SUM, COUNT.
 
-A JOIN clause can also be used in the FROM clause:
-`SELECT e FROM Employee e JOIN e.address a WHERE a.city = :city` or
+A JOIN clause can also be used in the FROM clause:\
+`SELECT e FROM Employee e JOIN e.address a WHERE a.city = :city`\ 
+or\
 `SELECT e FROM Employee e LEFT JOIN e.address a ON a.city = :city` in JPA 2.1
 
-The FETCH option can be used on a JOIN to fetch the related objects in a single query:
+The FETCH option can be used on a JOIN to fetch the related objects in a single query:\
 `SELECT e FROM Employee e JOIN FETCH e.address`
 
-By default all joins in JPQL are INNER joins. This means that results that do not have the relationship will be filtered from the query results. To avoid this, a join can be defined as an OUTER join using the LEFT options:
+By default all joins in JPQL are INNER joins. This means that results that do not have the relationship will be filtered from the query results. To avoid this, a join can be defined as an OUTER join using the LEFT options:\
 `SELECT e FROM Employee e LEFT JOIN e.address a ORDER BY a.city`
 
 JPA does not support sub-selects in the FROM clause.
 
-ORDER BY allows the ordering of the results to be specified:
+ORDER BY allows the ordering of the results to be specified:\
 `SELECT e FROM Employee e ORDER BY e.lastName ASC`
 
-GROUP BY allows for summary information to be computed on a set of objects. GROUP BY is normally used in conjunction with aggregation functions:
+GROUP BY allows for summary information to be computed on a set of objects. GROUP BY is normally used in conjunction with aggregation functions:\
 `SELECT e, COUNT(p) FROM Employee e LEFT JOIN e.projects p GROUP BY e`
 
-The HAVING clause allows for the results of a GROUP BY to be filtered:
+The HAVING clause allows for the results of a GROUP BY to be filtered:\
 `SELECT AVG(e.salary), e.address.city FROM Employee e GROUP BY e.address.city HAVING AVG(e.salary) > 100000`
 
 JPA does not support the SQL UNION.
@@ -335,7 +336,7 @@ Possible expressions in WHERE clause:
 - e.endDate IS NULL
 - e.firstName IN ('Bob', 'Fred', 'Joe')
 
-The IN operation allows for a list of values or parameters, a single list parameter, or a sub-select:
+The IN operation allows for a list of values or parameters, a single list parameter, or a sub-select:\
 `e.firstName = (SELECT e2.firstName from Employee e2 WHERE e2.id = :id)`
 
 JPA defines named parameters, and positional parameters:
