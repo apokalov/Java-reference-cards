@@ -161,10 +161,12 @@ Join fetching is a query optimization technique for reading multiple objects in 
 Join fetching is one solution to the ORM n+1 problem. The issue is if you select n Employee objects, and access each of their addresses, in basic ORM you will get 1 select for the Employee objects, and then n selects, one for each Address object. Join fetching solves this issue by only requiring one select, and selecting both the Employee and its Address.
 
 JPA supports join fetching through JPQL using the `JOIN FETCH` syntax:
+
 `SELECT emp FROM Employee emp JOIN FETCH emp.address`
 This causes both the Employee and Address data to be selected in a single query.
 
 If your relationship allows null or an empty collection for collection relationships, then you can use outer join:
+
 `SELECT emp FROM Employee emp LEFT JOIN FETCH emp.address`
 
 #### 12. OneToOne
