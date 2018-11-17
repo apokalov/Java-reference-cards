@@ -156,22 +156,19 @@ public class Employee {
 ```
 
 #### 11. Join fetch
-Join fetching is a query optimization technique for reading multiple objects in a single database query. It involves joining the two object's tables in SQL and selecting both object's data. Join fetching is commonly used for `OneToOne` relationships, but also can be used for any relationship including `OneToMany` and `ManyToMany`.
+Join fetching is a query optimization technique for reading multiple objects in a single database query. It involves joining the two object's tables in SQL and selecting both object's data.
 
 Join fetching is one solution to the ORM n+1 problem. The issue is if you select n Employee objects, and access each of their addresses, in basic ORM you will get 1 select for the Employee objects, and then n selects, one for each Address object. Join fetching solves this issue by only requiring one select, and selecting both the Employee and its Address.
 
-JPA supports join fetching through JPQL using the `JOIN FETCH` syntax:
-
+JPA supports join fetching through JPQL using the `JOIN FETCH` syntax:\
 `SELECT emp FROM Employee emp JOIN FETCH emp.address`
-This causes both the Employee and Address data to be selected in a single query.
 
-If your relationship allows null or an empty collection for collection relationships, then you can use outer join:
-
+If your relationship allows null or an empty collection, then you can use outer join:\
 `SELECT emp FROM Employee emp LEFT JOIN FETCH emp.address`
 
 #### 12. OneToOne
-In `OneToOne` relationship the fk may either be in the source object's table or the target object's table. If the foreign key is in the target object's table JPA requires that the relationship be bi-directional (must be defined in both objects), and the source object must use the `mappedBy` attribute to define the mapping.
-A `OneToOne` relationship typically requires a `@JoinColumn`.
+In `OneToOne` relationship a foreign key may either be in the source object's table or the target object's table. If the fk is in the target object's table JPA requires that the relationship be bi-directional (must be defined in both objects), and the source object must use the `mappedBy` attribute to define the mapping.
+A `OneToOne` relationship typically requires a `@JoinColumn`:
 ```java
 @Entity
 public class Employee {
