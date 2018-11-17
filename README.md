@@ -299,23 +299,23 @@ public class Employee {
 #### 17. JPQL
 JPQL is similar to SQL, but operates on objects, attributes and relationships instead of tables and columns. JPQL can be used for reading (SELECT), as well as bulk updates (UPDATE) and deletes (DELETE).
 
-Aggregation functions can include summary information on a set of objects. These include MIN, MAX, AVG, SUM, COUNT.
-
 A JOIN clause can also be used in the FROM clause:\
 `SELECT e FROM Employee e JOIN e.address a WHERE a.city = :city`\
-or\
-`SELECT e FROM Employee e LEFT JOIN e.address a ON a.city = :city` in JPA 2.1
+or using ON in JPA 2.1:\
+`SELECT e FROM Employee e LEFT JOIN e.address a ON a.city = :city`
 
 The FETCH option can be used on a JOIN to fetch the related objects in a single query:\
 `SELECT e FROM Employee e JOIN FETCH e.address`
 
-By default all joins in JPQL are INNER joins. This means that results that do not have the relationship will be filtered from the query results. To avoid this, a join can be defined as an OUTER join using the LEFT options:\
+By default all joins in JPQL are INNER joins. A join can be defined as an OUTER join using the LEFT options:\
 `SELECT e FROM Employee e LEFT JOIN e.address a ORDER BY a.city`
 
 JPA does not support sub-selects in the FROM clause.
 
 ORDER BY allows the ordering of the results to be specified:\
 `SELECT e FROM Employee e ORDER BY e.lastName ASC`
+
+Aggregation functions include MIN, MAX, AVG, SUM, COUNT.
 
 GROUP BY allows for summary information to be computed on a set of objects. GROUP BY is normally used in conjunction with aggregation functions:\
 `SELECT e, COUNT(p) FROM Employee e LEFT JOIN e.projects p GROUP BY e`
@@ -349,14 +349,14 @@ query.setParameter(1, "Bob");
 ```
 
 JPQL supported functions:
-- ABS	absolute value	 ABS(e.salary - e.manager.salary)
-- CASE	defines a case statement	 CASE e.status WHEN 0 THEN 'active' WHEN 1 THEN 'consultant' ELSE 'unknown' END
-- COALESCE	evaluates to the first non null argument value	COALESCE(e.salary, 0)
-- CONCAT	concatenates two or more string values CONCAT(e.firstName, ' ', e.lastName)
-- CURRENT_DATE	the current date on the database	
-- CURRENT_TIME	the current time on the database	
-- CURRENT_TIMESTAMP	the current date-time on the database	
-- LENGTH	the character/byte length of the character or binary value	 LENGTH(e.lastName)
+- ABS absolute value, e.g. `ABS(e.salary - e.manager.salary)`
+- CASE defines a case statement, e.g. `CASE e.status WHEN 0 THEN 'active' WHEN 1 THEN 'consultant' ELSE 'unknown' END`
+- COALESCE evaluates to the first non null argument value, e.g. `COALESCE(e.salary, 0)`
+- CONCAT concatenates two or more string values, e.g. `CONCAT(e.firstName, ' ', e.lastName)`
+- CURRENT_DATE the current date on the database	
+- CURRENT_TIME the current time on the database	
+- CURRENT_TIMESTAMP the current date-time on the database	
+- LENGTH the character/byte length of the character or binary value, e.g. `LENGTH(e.lastName)`
 - LOWER	convert the string value to lower case	
-- SUBSTRING	the substring from the string, starting at the index, optionally with the substring size SUBSTRING(e.lastName, 0, 2)
+- SUBSTRING	the substring from the string, starting at the index, optionally with the substring size, e.g. `SUBSTRING(e.lastName, 0, 2)`
 - UPPER	convert the string value to upper case	
