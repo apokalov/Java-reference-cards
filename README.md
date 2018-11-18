@@ -26,7 +26,7 @@ public class Employee {
 ```
 
 #### 2. @Basic
-A basic attribute is for simple types such as `String, Number, Date` or a primitive. The following table summarizes the basic types and the database types they map to:
+A basic attribute for simple types such as `String, Number, Date` or a primitive. The following table summarizes the basic types and the database types they map to:
 
 Java type | Database type
 --------- | -------------
@@ -50,7 +50,7 @@ A Basic attribute can have `optional` which defines whether the value of the fie
 The definition of `optional` talks about property and field values and suggests that this feature should be evaluated within the runtime. `nullable` is only in reference to database columns.
 
 #### 3. @Column
-Is used to specify a mapped column for a persistent property or field. If no `@Column` is specified, the default values are applied.
+Annotation is used to specify a mapped column for a persistent property or field. If no `@Column` is specified, the default values are applied.
 
 There are various attributes on the `@Column` annotation:
 ```java
@@ -63,7 +63,7 @@ private BigDecimal salary;
 @Column(name="S_TIME", columnDefinition="TIMESTAMPTZ")
 private Calendar startTime;
 ```
-The `@Column` defines `insertable` and `updatable` options. These allow for this column to be omitted from the SQL INSERT or UPDATE statement. Setting both insertable and updatable to false, effectively mark the attribute as read-only.
+`@Column` defines `insertable` and `updatable` options. These allow for this column to be omitted from the SQL INSERT or UPDATE statement. Setting both insertable and updatable to false, effectively mark the attribute as read-only.
 
 #### 4. @Transient
 JPA's `@Transient` annotation is used to indicate that a field is not to be persisted in the database:
@@ -115,7 +115,7 @@ Possible types of associations are:
 - `ElementCollection` - Collection or Map of Basic or Embeddable objects, stored in a separate table
 
 #### 8. Fetching
-Lazy fetching allows the fetching of a relationship to be deferred until it is accessed.
+Lazy fetching allows to defer the fetching of a relationship until it is accessed.
 The default fetch type is `LAZY` for all relationships except for `OneToOne` and `ManyToOne`.
 ```java
 @OneToOne(fetch=FetchType.LAZY)
@@ -124,7 +124,7 @@ For collection relationships sending `size()` is normally the best way to ensure
 Another solution is to use the JPQL `JOIN FETCH` for the relationship when querying the objects.
 
 #### 9. Cascading
-Relationships can have a cascade option that allows to model dependent relationships such as `Order` -> `OrderLine`. Cascading such relationship allows for the Order's -> OrderLines to be persisted, removed, merged along with their parent.
+Relationships can have a `cascade` option that allows to model dependent relationships such as `Order` -> `OrderLine`. Cascading such relationship allows for the Order's -> OrderLines to be persisted, removed, merged along with their parent.
 The following operations can be cascaded, as defined in the `CascadeType` enum:
 - `PERSIST` - Cascaded the `EntityManager.persist()` operation. If `persist()` is called on the parent, and the child is also new, it will also be persisted. If it is existing, nothing will occur, although calling `persist()` on an existing object will still cascade the persist operation to its dependents.
 - `REMOVE` - If `EntityManager.remove()` is called on the parent then the child will also be removed. This should only be used for dependent relationships. If one removes a dependent object from a `OneToMany` collection it will not be deleted, JPA requires that you explicitly call `remove()` on it.
@@ -143,7 +143,9 @@ public class Employee {
 ```
 #### 10. Maps
 JPA allows a Map to be used for any collection mapping including `OneToMany`, `ManyToMany` and `ElementCollection`.
-`@MapKeyColumn` annotation is used to define a map relationship where the key is a Basic value, the `@MapKeyJoinColumn` annotation is used to define a map relationship where the key is an Entity value. There are also `@MapKeyJoinColumns`, `@MapKeyEnumerated` and `@MapKeyTemporal`.
+`@MapKeyColumn` annotation is used to define a map relationship where the key is a Basic value, the `@MapKeyJoinColumn` annotation is used to define a map relationship where the key is an Entity value. There are also `@MapKeyJoinColumns`, `@MapKeyEnumerated` and `@MapKeyTemporal`.\
+![1_entity_2_tables](https://github.com/chirkov86/JPA-cheatsheet/blob/master/JPA_Map.png)
+
 ```java
 @Entity
 public class Employee {
