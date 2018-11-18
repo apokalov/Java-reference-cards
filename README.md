@@ -41,12 +41,12 @@ java.lang.Enum	| NUMERIC (VARCHAR, CHAR)
 
 Any un-mapped field will be automatically mapped as `@basic` and column name defaulted.
 
-By default all Basic mappings are `EAGER`, though fetch attribute can be set on a Basic mapping to use `LAZY` fetching:
+By default all Basic mappings are `EAGER`, though `fetch` attribute can be set on a Basic mapping to use `LAZY` fetching:
 `@Basic(fetch=FetchType.LAZY)`.
 
 A Basic attribute can have `optional` which defines whether the value of the field may be null. By default everything is assumed to be optional, except for an `@Id`.
 
-`@Basic(optional = false)` vs `@Column(nullable = false)` in JPA:
+`@Basic(optional = false)` vs `@Column(nullable = false)` difference:
 The definition of `optional` talks about property and field values and suggests that this feature should be evaluated within the runtime. `nullable` is only in reference to database columns.
 
 #### 3. @Column
@@ -143,7 +143,8 @@ public class Employee {
 ```
 #### 10. Maps
 JPA allows a Map to be used for any collection mapping including `OneToMany`, `ManyToMany` and `ElementCollection`.
-`@MapKeyColumn` annotation is used to define a map relationship where the key is a Basic value, the `@MapKeyJoinColumn` annotation is used to define a map relationship where the key is an Entity value. There are also `@MapKeyJoinColumns`, `@MapKeyEnumerated` and `@MapKeyTemporal`.\
+`@MapKeyColumn` annotation is used to define a map relationship where the key is a Basic value, the `@MapKeyJoinColumn` annotation is used to define a map relationship where the key is an Entity value. There are also `@MapKeyJoinColumns`, `@MapKeyEnumerated` and `@MapKeyTemporal`.
+
 ![1_entity_2_tables](https://github.com/chirkov86/JPA-cheatsheet/blob/master/JPA_Map.png)
 
 ```java
