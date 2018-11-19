@@ -28,7 +28,6 @@ The Spring Boot Gradle Plugin provides
  - `@EnableAutoConfiguration` tells Spring Boot to "guess" how you want to configure Spring, based on the jar dependencies that you have on class path.
  - `@ComponentScan(basePackages="com...")` will automatically pick up all Spring components, including `@Configuration` classes.
  - `@Configuration` allow to register extra beans in the context or import additional configuration classes.
-Expects `application.properties` file in the project dir.
 
 #### 3 @SpringBootTest
 `@SpringBootTest` is used for testing to load the application context.
