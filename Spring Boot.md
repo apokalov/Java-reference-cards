@@ -1,6 +1,6 @@
 ## Spring Boot
 
-#### Adding Spring Boot to project
+#### 1 Adding Spring Boot to project
 Gradle example:
 
 ```groovy
@@ -23,17 +23,17 @@ The Spring Boot Gradle Plugin provides
 - package executable jar or war archives, run Spring Boot applications
 - use the dependency management provided by `spring-boot-dependencies`, i.e. it allows omitting versions when declaring `spring-boot-starter-*` dependencies.
 
-#### @SpringBootApplication
+#### 2 @SpringBootApplication
 `@SpringBootApplication` is equivalent to [`@Configuration`, `@EnableAutoConfiguration`, `@ComponentScan`].
  - `@EnableAutoConfiguration` tells Spring Boot to "guess" how you want to configure Spring, based on the jar dependencies that you have on class path.
  - `@ComponentScan(basePackages="com...")` will automatically pick up all Spring components, including `@Configuration` classes.
  - `@Configuration` allow to register extra beans in the context or import additional configuration classes.
 Expects `application.properties` file in the project dir.
 
-#### @SpringBootTest
+#### 3 @SpringBootTest
 `@SpringBootTest` is used for testing to load the application context.
 
-#### Properties
+#### 4 Properties
 The default property File is `application.properties`. The expected locations are:
 - a `/config` subdirectory of the current directory
 - the current directory
@@ -52,7 +52,7 @@ or via system properties:
 
 Spring Boot will also detect **environment variables**, treating them as properties.
 
-#### @PropertySource
+#### 5 @PropertySource
  Allows adding property sources to the environment, e.g:
  ```java
 @Configuration
@@ -62,7 +62,7 @@ public class PropertiesWithJavaConfig {
 }
 ```
 
-#### @Value
+#### 6 @Value
 Injecting a property with the @Value annotation:
 ```java
 @Value( "${jdbc.url}" )
